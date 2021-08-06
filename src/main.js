@@ -1,52 +1,119 @@
 const path = require('path');
 const fs = require('fs');
+const marked = require('marked');
+/* const { title } = require('process'); */
+/* const { dir } = require('console');
+const { CONNREFUSED } = require('dns'); */
+//const { randomBytes } = require('crypto');
 
-const relativePath = 'src\\testLinks\\archivo1.md'
+const relativePath = 'src\\testLinks'//quite \\archivo1.md
 const absolutePath = 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\src\\testLinks\\archivo1.md';
 
-let isAbsolute = path.isAbsolute(absolutePath) //Valido si es absoluta True
+//Valido si es absoluta True
+let isAbsolute = path.isAbsolute(absolutePath) 
 
-//Verifica si la ruta es absoluta y si es relativa devuelve absoluta
+//01 Verifica si la ruta es absoluta y si es relativa devuelve absoluta
 function validatePath(relativePath){
     return path.isAbsolute(relativePath) === true ? relativePath : path.resolve(relativePath)
 }
-console.log(validatePath(relativePath), " 1 Relativa a absoluta");
+//console.log(validatePath(relativePath), " 1 Relativa a absoluta");
 
-//Ve si existe la ruta
-function pathExists(absolutePath){
-    return fs.existsSync(absolutePath), " 2 ve si la ruta es existe";
+// 02 Ve si existe la ruta (OPCIONAL)
+function pathExists(route){
+    return fs.existsSync(route);
 }
-console.log(pathExists(absolutePath))
+//console.log(pathExists(relativePath))
 
-//Existe el archivo
-const isFile = ((absolutePath)=> fs.statSync(absolutePath).isFile());
-console.log(isFile(absolutePath)," 3 --> ve si el archivo existe");
+// 03 Verifica si es carpeta
+const isFile = ((route)=> fs.statSync(route).isFile());
+//console.log(isFile(absolutePath));
 
-// si la extension es .md
-const isMd = (absolutePath) => (path.extname(absolutePath));
-console.log(isMd(absolutePath)," 4  ver la extension")
+// 04 
+const isMd = (parametroPath) => (path.extname(parametroPath));
 
-//Lee la carpeta
-fs.readFile('src\\testLinks\\archivo1.md','UTF-8', function (err,data){
-    if(err){
-        return console.log(err);
+// 05 RECURSIVIDAD IDENTIFICACION
+const identificarFileDirecory = (paths)=>{
+    const directory = fs.lstatSync(paths).isDirectory();
+    const file = fs.lstatSync(paths).isFile();
+    //console.log(directory)
+
+    let message;
+    let getArrayFilesMd =[];
+    let rutaValidada = validatePath(paths); //trabaja con la ruta ingresada en esta funcion
+
+    if (directory) {
+        message = 'Is  directory';
+    } 
+    if (file){
+        message = 'Is  file';
+        if (isMd(rutaValidada) === '.md') {
+            getArrayFilesMd.push(rutaValidada);
+        }
     }
-    console.log(data, ' 5 lee el documento')
-});
+    return message;
+}
 
-//Leer archivos de un directorio
-fs.readdir('./src', (error, files)=>{
-    if (error){
-        throw error
+//RECURSIVIDAD
+const crawl = (dir) => {
+    console.log('[+]', dir);
+    let carpetas = fs.readdirSync(dir); //LEE y enumera todas las carpetas
+    for(let i in carpetas){ //variable i(itera) en las carpetas
+        let unir = path.join(dir, carpetas[i]);//unir la directorio y la carpetas existentes
+        console.log(unir , "UNIR")
+        if (fs.lstatSync(unir).isDirectory()==true) {
+            crawl(unir);
+           
+           console.log(crawl(unir),'UNIDO') 
+        }
+        else{
+            console.log('/t', unir)
+            let arrayMdDirectory=[];
+            if (isMd(unir)==='.md') {
+                arrayMdDirectory.push(unir);
+                console.log(arrayMdDirectory)
+            }
+        }
     }
-    console.log('Finalizado la lectura');
-    console.log(files);
-})
-// traer los link href
+   console.log(carpetas)
+}
+crawl(__dirname)
+//console.log(crawl(relativePath));
 
+//READ FILE
+const readingFile = (path) => fs.readFileSync(path).toString();
 
+//MARKED practica
+/* const renderer =  new marked.Renderer()
+renderer.heading = function (text, level){
+    return 'Text:' +text+ 'Level: ' + level
+} */
+//console.log(marked('## test' , {renderer: renderer}))
+
+const getLink = (path) =>{
+    let arrayLinks = [];
+    const renderer = new marked.Renderer();
+    crawl(path).forEach((file) => {
+        renderer.link = (href, title, text) =>{
+            const propertiesFind = {
+                href,
+                text,
+                file,
+            };
+            arrayLinks.push(propertiesFind);
+        };
+        marked(readingFile(file),{renderer});
+    });
+    return arrayLinks;
+};
+//console.log(marked(readingFile(absolutePath)));
 
 module.exports = () => {
     validatePath,
-    pathExists
+    pathExists,
+    isFile, //look
+    isMd,
+    identificarFileDirecory,
+    crawl,
+    readingFile,
+    getLink
 };
