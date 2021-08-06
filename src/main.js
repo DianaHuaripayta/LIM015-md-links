@@ -12,26 +12,22 @@ const absolutePath = 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\src\\testLink
 //Valido si es absoluta True
 let isAbsolute = path.isAbsolute(absolutePath) 
 
-//01 Verifica si la ruta es absoluta y si es relativa devuelve absoluta
 function validatePath(relativePath){
     return path.isAbsolute(relativePath) === true ? relativePath : path.resolve(relativePath)
 }
 //console.log(validatePath(relativePath), " 1 Relativa a absoluta");
 
-// 02 Ve si existe la ruta (OPCIONAL)
 function pathExists(route){
     return fs.existsSync(route);
 }
 //console.log(pathExists(relativePath))
 
-// 03 Verifica si es carpeta
+
 const isFile = ((route)=> fs.statSync(route).isFile());
 //console.log(isFile(absolutePath));
 
-// 04 
 const isMd = (parametroPath) => (path.extname(parametroPath));
 
-// 05 RECURSIVIDAD IDENTIFICACION
 const identificarFileDirecory = (paths)=>{
     const directory = fs.lstatSync(paths).isDirectory();
     const file = fs.lstatSync(paths).isFile();
@@ -79,7 +75,6 @@ const crawl = (dir) => {
 crawl(__dirname)
 //console.log(crawl(relativePath));
 
-//READ FILE
 const readingFile = (path) => fs.readFileSync(path).toString();
 
 //MARKED practica
