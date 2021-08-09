@@ -1,1 +1,2 @@
-My twitter [link]('https://twitter.com/home?lang=es')
+My twitter [link]('https://twitter.com/home?lang=es') 
+archivo tipo texto
