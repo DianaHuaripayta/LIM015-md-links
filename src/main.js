@@ -7,69 +7,68 @@ const absolutePath = 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\src\\testLink
 const relativePath = 'src\\testLinks';
 
 //See if the path is relative or absolute
-const absOrRela = (route) =>{
+const getPathAbsolute = (route) =>{
     return path.isAbsolute(route) === true ? route : path.resolve(route)
 }
-console.log(absOrRela(absolutePath));  //convert relative a absolute || if the path was absolute and equal to true, just continue
-//See if the path exists in the local  
-//from here the tests are with the relative path that was passed by absolute 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\src\\testLinks'
+  
 const validateRoute = (routeAbsolute) =>{
     return fs.existsSync(routeAbsolute) 
 }
 console.log(validateRoute('E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\src\\testLinks'));//relative path that was passed by absolute.
 
 //Identificar si es archivo o carpeta
-const file = (route) =>{
-    const file = fs.lstatSync(route).isFile();
-    let message;
-    if (file){
-        message = 'Is  file';
-    }
-    return message;
-}
+const isFile = (route) => fs.lstatSync(route).isFile();
+
+const isMd = route => ((path.extname(route) === '.md'));
+
+const readDirectory = route => fs.readdirSync(route);
 
 //Test solo para directorios
 const getFilesMd = (filePath) =>{
-    const itemArray =[]; //Array de todas las rutas con la extension md
-    const statFile = fs.statSync(filePath);
-    if (statFile.isDirectory()) {
-        const dirFile = fs.readdirSync(filePath);
-        if (dirFile.length > 0) {
-            return dirFile.reduce((acc,item)=>{
-                const newPathAbs = path.join(filePath,item);
-              //Recursividad
-               return acc.concat(getFilesMd(newPathAbs)); 
-            },[]); 
+    let arrayNewPathAbs =[]; //Array de todas las rutas con la extension md
+    const newPathAbs = getPathAbsolute(filePath);
+    if (isFile(newPathAbs)) {
+        if (isMd(newPathAbs)) {
+            arrayNewPathAbs.push(newPathAbs)
         }
-    }else if (path.extname(filePath) === '.md') {
-        itemArray.push(filePath);//Agregar al array con los links encontrados
+    }else{
+        const data = readDirectory(newPathAbs);
+        data.forEach((elem) =>{
+            const addRoute = path.join(newPathAbs, elem);
+            const file = getFilesMd(addRoute); //recursion se llama a si mismo
+            arrayNewPathAbs = arrayNewPathAbs.concat(file);
+        });
     }
-    return itemArray;
+    return arrayNewPathAbs
 };
-console.log(getFilesMd('E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\src\\testLinks'))
 
-const readFileTest = (routeFile) =>{
-      for(x in routeFile){
-          routeFile[x]
-          let insideArray = fs.readFileSync(routeFile[x],'utf-8').split("\n");
-          console.log(insideArray,[
-              'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\src\\testLinks\\archivo1.md',
-              'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\src\\testLinks\\archivoEmpty.md',
-              'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\src\\testLinks\\fileLinks\\archivo2.md'
-            ], ' --> dentro del Array')
-   
-      }
-}  
-console.log(readFileTest([
-    'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\src\\testLinks\\archivo1.md',
-    'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\src\\testLinks\\archivoEmpty.md',
-    'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\src\\testLinks\\fileLinks\\archivo2.md'
-  ]), ' --> read test');
+const readFile = route => fs.readFileSync(route, 'utf-8');
+const getLinks = (route) =>{
+    const render = new marked.Renderer();
+    let arrayLinks = [];
+    const dataDemo = getFilesMd(route);
+    dataDemo.forEach((File) =>{
+        render.link = (href, title, text) =>{
+            const propertiesFind = {
+                href,
+                text,
+                file: File,
+            }
+            arrayLinks.push(propertiesFind);
+        };
+        marked(readFile(File), { renderer: render})
+    });
+    
+    return arrayLinks
+};
 
-module.exports=()=>{
-    absOrRela,
+module.exports = {
+    getPathAbsolute,
     validateRoute,
-    file,
+    isFile,
+    isMd,
+    readDirectory,
     getFilesMd,
-    readFileTest
+    readFile,
+    getLinks
 }
