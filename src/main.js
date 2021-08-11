@@ -1,6 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 const marked = require('marked');
+const fetch = require('node-fetch');
 //LEYENDA --> PATH (PARAMETER)
 //Input Path
 const absolutePath = 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\src\\testLinks\\fileLinks'; //absoluta y directorio
@@ -14,7 +15,7 @@ const getPathAbsolute = (route) =>{
 const validateRoute = (routeAbsolute) =>{
     return fs.existsSync(routeAbsolute) 
 }
-console.log(validateRoute('E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\src\\testLinks'));//relative path that was passed by absolute.
+//console.log(validateRoute('E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\src\\testLinks'));//relative path that was passed by absolute.
 
 //Identificar si es archivo o carpeta
 const isFile = (route) => fs.lstatSync(route).isFile();
@@ -41,8 +42,10 @@ const getFilesMd = (filePath) =>{
     }
     return arrayNewPathAbs
 };
+//console.log(getFilesMd('E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\src\\testLinks'))
 
 const readFile = route => fs.readFileSync(route, 'utf-8');
+
 const getLinks = (route) =>{
     const render = new marked.Renderer();
     let arrayLinks = [];
@@ -54,13 +57,49 @@ const getLinks = (route) =>{
                 text,
                 file: File,
             }
+            
             arrayLinks.push(propertiesFind);
         };
         marked(readFile(File), { renderer: render})
+        
     });
     
     return arrayLinks
 };
+
+const validateLink = (arrayLink) => {
+    const statusLinks = arrayLink.map((element) => // map: retorna un array nuevo
+    fetch(element.href)
+      .then((res) => { //la interfaz Response contiene el código de estado de la respuesta (ejm., 200 para un éxito).
+        if(res.status == 200){
+          return {
+            href: element.href,
+            text: (element.text.substring(0, 50)),
+            path: element.file,
+            status: res.status,
+            statusText: 'OK'
+          }
+        } else if((res.status == 404 )|| (res.status  == 400)){
+            return {
+            href: element.href,
+            text: (element.text.substring(0, 50)),
+            path: element.file,
+            status: res.status,
+            statusText: 'fail'
+          }
+        }})
+      .catch(() => {
+        return {
+          href: element.href,
+          text: (element.text.substring(0, 50)),
+          path: element.file,
+          status: 404,
+          statusText: 'fail'
+        }
+      })
+      );
+    return Promise.all(statusLinks);
+  };
 
 module.exports = {
     getPathAbsolute,
@@ -70,5 +109,6 @@ module.exports = {
     readDirectory,
     getFilesMd,
     readFile,
-    getLinks
+    getLinks,
+    validateLink
 }
