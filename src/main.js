@@ -35,7 +35,7 @@ const getFilesMd = (filePath) =>{
     }else{
         const data = readDirectory(newPathAbs);
         data.forEach((elem) =>{
-            const addRoute = path.join(newPathAbs, elem);
+            const addRoute = path.resolve(newPathAbs, elem);//antes join();arreves
             const file = getFilesMd(addRoute); //recursion se llama a si mismo
             arrayNewPathAbs = arrayNewPathAbs.concat(file);
         });
@@ -49,23 +49,29 @@ const readFile = route => fs.readFileSync(route, 'utf-8');
 const getLinks = (route) =>{
     const render = new marked.Renderer();
     let arrayLinks = [];
-    const dataDemo = getFilesMd(route);
-    dataDemo.forEach((File) =>{
+
+    route.forEach((File) =>{
+      console.log(File);
         render.link = (href, title, text) =>{
             const propertiesFind = {
                 href,
                 text,
                 file: File,
             }
-            
             arrayLinks.push(propertiesFind);
         };
         marked(readFile(File), { renderer: render})
-        
     });
     
     return arrayLinks
 };
+
+const arrMd = [
+  "E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\src\\testLinks\\archivo1.md",
+  "E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\src\\testLinks\\archivoEmpty.md",
+  "E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\src\\testLinks\\fileLinks\\archivo2.md"
+];
+console.log(getLinks(arrMd));
 
 const validateLink = (arrayLink) => {
     const statusLinks = arrayLink.map((element) => // map: retorna un array nuevo
@@ -101,6 +107,27 @@ const validateLink = (arrayLink) => {
     return Promise.all(statusLinks);
   };
 
+  const saveArray = getLinks(arrMd);
+  validateLink(saveArray).then((res)=>console.log(res));
+
+   //Suma de todos los links, Unique and broken
+  const totalLink = (array) =>{ //statusLink
+    const total = array.leght;
+    return total;
+  } 
+
+  const uniqueLink = (array) =>{
+    const unique = [...new Set(array.map((link)=> link.href))]; //
+    return unique.length;
+  }
+
+  const brokenLinks = (array) =>{
+    const broken = array.filter((link) => link.statusText == 'fail');
+    console.log(broken)
+    return broken.leght;
+  };
+
+
 module.exports = {
     getPathAbsolute,
     validateRoute,
@@ -110,5 +137,9 @@ module.exports = {
     getFilesMd,
     readFile,
     getLinks,
-    validateLink
+    validateLink,
+
+    totalLink,
+    uniqueLink,
+    brokenLinks
 }
