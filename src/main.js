@@ -49,9 +49,8 @@ const readFile = route => fs.readFileSync(route, 'utf-8');
 const getLinks = (route) =>{
     const render = new marked.Renderer();
     let arrayLinks = [];
-
     route.forEach((File) =>{
-      console.log(File);
+     // console.log(File);
         render.link = (href, title, text) =>{
             const propertiesFind = {
                 href,
@@ -71,7 +70,7 @@ const arrMd = [
   "E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\src\\testLinks\\archivoEmpty.md",
   "E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\src\\testLinks\\fileLinks\\archivo2.md"
 ];
-console.log(getLinks(arrMd));
+//console.log(getLinks(arrMd));
 
 const validateLink = (arrayLink) => {
     const statusLinks = arrayLink.map((element) => // map: retorna un array nuevo
@@ -107,8 +106,8 @@ const validateLink = (arrayLink) => {
     return Promise.all(statusLinks);
   };
 
-  const saveArray = getLinks(arrMd);
-  validateLink(saveArray).then((res)=>console.log(res));
+ /*  const saveArray = getLinks(arrMd);
+  validateLink(saveArray).then((res)=>console.log(res)); */
 
    //Suma de todos los links, Unique and broken
   const totalLink = (array) =>{ //statusLink
@@ -123,12 +122,12 @@ const validateLink = (arrayLink) => {
 
   const brokenLinks = (array) =>{
     const broken = array.filter((link) => link.statusText == 'fail');
-    console.log(broken)
+    //console.log(broken)
     return broken.leght;
   };
 
 
-module.exports = {
+  module.exports = {
     getPathAbsolute,
     validateRoute,
     isFile,
@@ -138,8 +137,7 @@ module.exports = {
     readFile,
     getLinks,
     validateLink,
-
     totalLink,
     uniqueLink,
     brokenLinks
-}
+};
