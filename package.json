@@ -7,7 +7,11 @@
     "test": "test"
   },
   "scripts": {
-    "test": "jest --verbose --coverage"
+    "test": "jest --verbose --coverage",
+    "prueba": " src/main.js",
+    "start": "node src/mdLinks.js",
+    "lint": "eslint --ext .js src/main.js  test/",
+    "test:coverage": "jest --coverage  --verbose"
   },
   "repository": {
     "type": "git",
@@ -16,16 +20,16 @@
   "keywords": [
     "markdown"
   ],
-  "author": "Diana",
+  "author": "Diana Huaripayta",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/DianaHuaripayta/LIM015-md-links/issues"
   },
   "homepage": "https://github.com/DianaHuaripayta/LIM015-md-links#readme",
-  "devDependencies": {
-    "jest": "^27.0.6"
-  },
+  
   "dependencies": {
+    "fetch-mock": "^9.11.0",
+    "jest": "^27.0.6",
     "marked": "^2.1.3",
     "node-fetch": "^2.6.1"
   }

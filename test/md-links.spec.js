@@ -88,20 +88,25 @@ describe('es una funcion', () => {
     expect(typeof getLinks).toBe('function');
   });
 
-  it('Esta funcion retorna array de objetos con 3 propiedades href, text, file', () => {
+ /*  it('Esta funcion retorna array de objetos con 3 propiedades href, text, file', () => {
+    const input = [
+    'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\broken_Link\\failLink.md',
+    'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\links.md',
+    'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\thereNoLink.md'
+  ]
     const output = [
-        {
-          href: 'https://www.bbc.com/mundo',
-          text: 'link',
-          file: 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\links.md'
-        },
-        {
-          href: 'https://www.ionos.es/paginas-web/desarrollo-web/tutorial-de-markdown',
-          text: 'link',
-          file: 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\links.md'
-        }
-      ]
-    
-    expect(getLinks('E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\links.md')).toEqual(output);
-  });
+      {
+        href: 'https://www.bbc.com/mundo',
+        text: 'link',
+        file: 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\links.md'
+      },
+      {
+        href: 'https://www.ionos.es/paginas-web/desarrollo-web/tutorial-de-markdown',
+        text: 'link',
+        file: 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\links.md'
+      }
+    ]
+  
+  expect(getLinks(input)).toEqual(output);
+}); */
 });

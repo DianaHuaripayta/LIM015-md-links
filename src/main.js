@@ -11,10 +11,11 @@ const relativePath = 'src\\testLinks';
 const getPathAbsolute = (route) =>{
     return path.isAbsolute(route) === true ? route : path.resolve(route)
 }
-  
+
 const validateRoute = (routeAbsolute) =>{
     return fs.existsSync(routeAbsolute) 
 }
+
 //console.log(validateRoute('E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\src\\testLinks'));//relative path that was passed by absolute.
 
 //Identificar si es archivo o carpeta
@@ -42,41 +43,46 @@ const getFilesMd = (filePath) =>{
     }
     return arrayNewPathAbs
 };
-//console.log(getFilesMd('E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\src\\testLinks'))
 
 const readFile = route => fs.readFileSync(route, 'utf-8');
 
 const getLinks = (route) =>{
     const render = new marked.Renderer();
     let arrayLinks = [];
-    route.forEach((File) =>{
-     // console.log(File);
-        render.link = (href, title, text) =>{
-            const propertiesFind = {
+    route.forEach((file) =>{
+      render.link = (href, title, text) => { // renderer define salida ouput con tres propiedades
+        const linkProperties = {
+          href,
+          text,
+          file
+        };
+        arrayLinks.push(linkProperties);
+      };
+       // render.link = (Href, title, Text) =>{
+          //arrayLinks.push({ href: Href, text: Text, file: File });
+            /* const propertiesFind = {
                 href,
                 text,
                 file: File,
             }
-            arrayLinks.push(propertiesFind);
-        };
-        marked(readFile(File), { renderer: render})
+            arrayLinks.push(propertiesFind); */
+        //};
+        marked(readFile(file), { renderer: render})
     });
-    
     return arrayLinks
 };
-
-const arrMd = [
+/* const arrMd = [
   "E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\src\\testLinks\\archivo1.md",
   "E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\src\\testLinks\\archivoEmpty.md",
   "E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\src\\testLinks\\fileLinks\\archivo2.md"
 ];
-//console.log(getLinks(arrMd));
+console.log(getLinks(arrMd)); */
 
 const validateLink = (arrayLink) => {
     const statusLinks = arrayLink.map((element) => // map: retorna un array nuevo
     fetch(element.href)
       .then((res) => { //la interfaz Response contiene el código de estado de la respuesta (ejm., 200 para un éxito).
-        if(res.status == 200){
+        if((res.status >= 200) && (res.status <= 399)){
           return {
             href: element.href,
             text: (element.text.substring(0, 50)),
@@ -84,7 +90,7 @@ const validateLink = (arrayLink) => {
             status: res.status,
             statusText: 'OK'
           }
-        } else if((res.status == 404 )|| (res.status  == 400)){
+        } else if((res.status < 200 )|| (res.status >=400)){
             return {
             href: element.href,
             text: (element.text.substring(0, 50)),
@@ -106,25 +112,28 @@ const validateLink = (arrayLink) => {
     return Promise.all(statusLinks);
   };
 
- /*  const saveArray = getLinks(arrMd);
-  validateLink(saveArray).then((res)=>console.log(res)); */
+ /* const saveArray = getLinks(arrMd);
+  validateLink(saveArray).then((res)=>console.log(res,'VALIDATE STATUS')); */
 
    //Suma de todos los links, Unique and broken
   const totalLink = (array) =>{ //statusLink
-    const total = array.leght;
+    const total = array.length;
     return total;
   } 
+//console.log(totalLink(statusLog),' TOTAL....')
 
   const uniqueLink = (array) =>{
     const unique = [...new Set(array.map((link)=> link.href))]; //
     return unique.length;
   }
+  //console.log(uniqueLink(statusLog),' Unique-......')
 
   const brokenLinks = (array) =>{
     const broken = array.filter((link) => link.statusText == 'fail');
-    //console.log(broken)
-    return broken.leght;
+    //broken.length
+    return broken.length;
   };
+ // console.log(brokenLinks(statusLog),' BROKEN-......')
 
 
   module.exports = {
