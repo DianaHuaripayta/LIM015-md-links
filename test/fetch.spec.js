@@ -1,4 +1,4 @@
-jest.mock('node-fetch');
+/* jest.mock('node-fetch');
 const fetch = require('node-fetch');
 
 const { validateLink } = require('../src/main');
@@ -48,7 +48,7 @@ describe('Validate link', () => {
     .then((res) => {
       expect(res).toEqual(obj);
     });
-  });
+  }); */
 
  /*  test('FAIL', () => {
     const arr = {
@@ -70,7 +70,7 @@ describe('Validate link', () => {
       expect(err).toEqual(obj);
     }); */
  // });
-});
+/* }); */
 
 /* const fetchMock = require('../__mocks__/node-fetch');
 const mdlinks = require('../src/mdLinks');
