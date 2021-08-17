@@ -62,7 +62,7 @@ describe('es una funcion', () => {
 
 // getFilesMd
 describe('es una funcion', () => {
-  it('comprobar si es una funcion', () => {
+  test('comprobar si es una funcion', () => {
     expect(typeof getFilesMd).toBe('function');
   });
 
@@ -70,7 +70,7 @@ describe('es una funcion', () => {
     const result = [
       'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\broken_Link\\failLink.md',
       'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\links.md',
-      'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\thereNoLink.md',
+      'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\linkTestFetch.md',
     ]
     expect(getFilesMd('E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files')).toEqual(result);
   });
@@ -88,25 +88,46 @@ describe('es una funcion', () => {
     expect(typeof getLinks).toBe('function');
   });
 
- /*  it('Esta funcion retorna array de objetos con 3 propiedades href, text, file', () => {
+  test('Esta funcion retorna array de objetos con 3 propiedades href, text, file', () => {
     const input = [
     'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\broken_Link\\failLink.md',
     'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\links.md',
-    'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\thereNoLink.md'
+    'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\linkTestFetch.md'
   ]
     const output = [
+      {
+        href: 'https://www.mclibre.org/consultar/css-fuente.html',
+        text: 'link',
+        file: 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\broken_Link\\failLink.md'
+      },
       {
         href: 'https://www.bbc.com/mundo',
         text: 'link',
         file: 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\links.md'
       },
       {
-        href: 'https://www.ionos.es/paginas-web/desarrollo-web/tutorial-de-markdown',
+        href: 'https://www.npmjs.com/package/fetch-mock',
         text: 'link',
         file: 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\links.md'
+      },
+      {
+        href: 'https://abc.github.io/assets404/',
+        text: 'link',
+        file: 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\links.md'
+      },
+      {
+        href: 'https://router.vuejs.org/api/',
+        text: 'Vue',
+        file: 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\linkTestFetch.md'
+      },
+      {
+        href: 'https://developer.mozilla.org/en-US/',
+        text: 'MDN',
+        file: 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\linkTestFetch.md'
       }
+     
     ]
   
   expect(getLinks(input)).toEqual(output);
-}); */
+});
 });

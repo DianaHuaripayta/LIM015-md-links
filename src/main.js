@@ -2,7 +2,7 @@ const path = require('path');
 const fs = require('fs');
 const marked = require('marked');
 const fetch = require('node-fetch');
-//LEYENDA --> PATH (PARAMETER)
+
 //Input Path
 const absolutePath = 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\src\\testLinks\\fileLinks'; //absoluta y directorio
 const relativePath = 'src\\testLinks';
@@ -18,7 +18,6 @@ const validateRoute = (routeAbsolute) =>{
 
 //console.log(validateRoute('E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\src\\testLinks'));//relative path that was passed by absolute.
 
-//Identificar si es archivo o carpeta
 const isFile = (route) => fs.lstatSync(route).isFile();
 
 const isMd = route => ((path.extname(route) === '.md'));
@@ -44,7 +43,7 @@ const getFilesMd = (filePath) =>{
     return arrayNewPathAbs
 };
 
-const readFile = route => fs.readFileSync(route, 'utf-8');
+const readFile = route => fs.readFileSync(route).toString();
 
 const getLinks = (route) =>{
     const render = new marked.Renderer();
@@ -58,15 +57,6 @@ const getLinks = (route) =>{
         };
         arrayLinks.push(linkProperties);
       };
-       // render.link = (Href, title, Text) =>{
-          //arrayLinks.push({ href: Href, text: Text, file: File });
-            /* const propertiesFind = {
-                href,
-                text,
-                file: File,
-            }
-            arrayLinks.push(propertiesFind); */
-        //};
         marked(readFile(file), { renderer: render})
     });
     return arrayLinks
@@ -76,12 +66,13 @@ const getLinks = (route) =>{
   "E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\src\\testLinks\\archivoEmpty.md",
   "E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\src\\testLinks\\fileLinks\\archivo2.md"
 ];
-console.log(getLinks(arrMd)); */
+console.log(getLinks(arrMd), 'getLink HREF, File, TEXT'); */
 
 const validateLink = (arrayLink) => {
-    const statusLinks = arrayLink.map((element) => // map: retorna un array nuevo
+    const statusLinks = arrayLink.map((element) => 
     fetch(element.href)
-      .then((res) => { //la interfaz Response contiene el código de estado de la respuesta (ejm., 200 para un éxito).
+      .then((res) => {
+        //console.log(res);
         if((res.status >= 200) && (res.status <= 399)){
           return {
             href: element.href,
@@ -115,26 +106,20 @@ const validateLink = (arrayLink) => {
  /* const saveArray = getLinks(arrMd);
   validateLink(saveArray).then((res)=>console.log(res,'VALIDATE STATUS')); */
 
-   //Suma de todos los links, Unique and broken
   const totalLink = (array) =>{ //statusLink
     const total = array.length;
     return total;
   } 
-//console.log(totalLink(statusLog),' TOTAL....')
 
   const uniqueLink = (array) =>{
     const unique = [...new Set(array.map((link)=> link.href))]; //
     return unique.length;
   }
-  //console.log(uniqueLink(statusLog),' Unique-......')
 
   const brokenLinks = (array) =>{
     const broken = array.filter((link) => link.statusText == 'fail');
-    //broken.length
     return broken.length;
   };
- // console.log(brokenLinks(statusLog),' BROKEN-......')
-
 
   module.exports = {
     getPathAbsolute,
