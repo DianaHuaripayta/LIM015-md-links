@@ -20,12 +20,12 @@ describe('Una ruta relativa debe retornar una ruta absoluta', () => {
 });
 //Validar si existe
 describe('la funcion que valida la ruta', () => {
-  it('comprobar si es una funcion', () => {
+  test('comprobar si es una funcion de validateRoute', () => {
     expect(typeof validateRoute).toBe('function');
   });
 
   it('Verifica si la ruta existe', () => {
-    expect(validateRoute('test\\test_files\\links.md')).toEqual(true);
+    expect(validateRoute('test\\test_files\\links.md')).toBe(true);
   });
 });
 //Verifica si es file
@@ -89,17 +89,7 @@ describe('es una funcion', () => {
   });
 
   test('Esta funcion retorna array de objetos con 3 propiedades href, text, file', () => {
-    const input = [
-    'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\broken_Link\\failLink.md',
-    'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\links.md',
-    'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\linkTestFetch.md'
-  ]
-    const output = [
-      {
-        href: 'https://www.mclibre.org/consultar/css-fuente.html',
-        text: 'link',
-        file: 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\broken_Link\\failLink.md'
-      },
+  const output = [
       {
         href: 'https://www.bbc.com/mundo',
         text: 'link',
@@ -114,20 +104,9 @@ describe('es una funcion', () => {
         href: 'https://abc.github.io/assets404/',
         text: 'link',
         file: 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\links.md'
-      },
-      {
-        href: 'https://router.vuejs.org/api/',
-        text: 'Vue',
-        file: 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\linkTestFetch.md'
-      },
-      {
-        href: 'https://developer.mozilla.org/en-US/',
-        text: 'MDN',
-        file: 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\linkTestFetch.md'
       }
-     
     ]
   
-  expect(getLinks(input)).toEqual(output);
+  expect(getLinks('E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\links.md')).toEqual(output);
 });
 });

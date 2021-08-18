@@ -22,7 +22,7 @@ const isFile = (route) => fs.lstatSync(route).isFile();
 
 const isMd = route => ((path.extname(route) === '.md'));
 
-const readDirectory = route => fs.readdirSync(route);
+const readDirectory = (route) => fs.readdirSync(route);
 
 //Test solo para directorios
 const getFilesMd = (filePath) =>{
@@ -43,12 +43,14 @@ const getFilesMd = (filePath) =>{
     return arrayNewPathAbs
 };
 
-const readFile = route => fs.readFileSync(route).toString();
+
+
+const readFile = route => fs.readFileSync(route, 'utf-8');
 
 const getLinks = (route) =>{
     const render = new marked.Renderer();
     let arrayLinks = [];
-    route.forEach((file) =>{
+    getFilesMd(route).forEach((file) =>{
       render.link = (href, title, text) => { // renderer define salida ouput con tres propiedades
         const linkProperties = {
           href,
@@ -66,7 +68,7 @@ const getLinks = (route) =>{
   "E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\src\\testLinks\\archivoEmpty.md",
   "E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\src\\testLinks\\fileLinks\\archivo2.md"
 ];
-console.log(getLinks(arrMd), 'getLink HREF, File, TEXT'); */
+console.log(getLinks(arrMd)); */
 
 const validateLink = (arrayLink) => {
     const statusLinks = arrayLink.map((element) => 
@@ -103,8 +105,29 @@ const validateLink = (arrayLink) => {
     return Promise.all(statusLinks);
   };
 
- /* const saveArray = getLinks(arrMd);
-  validateLink(saveArray).then((res)=>console.log(res,'VALIDATE STATUS')); */
+ const saveArray = [
+  {
+    href: 'https://www.bbc.com/mundo',
+    text: 'link',
+    file: 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\src\\testLinks\\archivo1.md'
+  },
+  {
+    href: 'https://www.ionos.es/paginas-web/desarrollo-web/tutorial-de-markdown',
+    text: 'link',
+    file: 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\src\\testLinks\\archivo1.md'
+  },
+  {
+    href: 'https://www.bculinary.com/es/home',
+    text: 'link',
+    file: 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\src\\testLinks\\fileLinks\\archivo2.md'
+  },
+  {
+    href: 'https://www.ionos.es/paginas-web/tutorial-de-markdown',
+    text: 'link',
+    file: 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\src\\testLinks\\fileLinks\\archivo2.md'
+  }
+];
+ /*  validateLink(saveArray).then((res)=>console.log(res,'VALIDATE STATUS')); */
 
   const totalLink = (array) =>{ //statusLink
     const total = array.length;

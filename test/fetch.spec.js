@@ -1,6 +1,7 @@
 const fetchMock = require('../__mocks__/node-fetch');
 const fetch = require('node-fetch');
 const { validateLink } = require('../src/main');
+//const mdlinks= require('../src/mdLinks');
 
 jest.mock('node-fetch');
 
@@ -10,12 +11,12 @@ describe('validate 200', () => {
       {
         href: 'https://router.vuejs.org/api/',
         text: 'Vue',
-        file: 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\linkTestFetch.md',
+        path: 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\linkTestFetch.md',
       },
       {
         href: 'https://developer.mozilla.org/en-US/',
         text: 'MDN',
-        file: 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\linkTestFetch.md',
+        path: 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\linkTestFetch.md',
       }
     ]
     const result = [

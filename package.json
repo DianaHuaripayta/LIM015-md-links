@@ -10,7 +10,6 @@
     "test": "jest --verbose --coverage",
     "prueba": " src/main.js",
     "start": "node src/mdLinks.js",
-    "lint": "eslint --ext .js src/main.js  test/",
     "test:coverage": "jest --coverage  --verbose"
   },
   "repository": {
