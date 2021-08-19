@@ -2,7 +2,7 @@ const path = require('path');
 const fs = require('fs');
 const marked = require('marked');
 const fetch = require('node-fetch');
-//LEYENDA --> PATH (PARAMETER)
+
 //Input Path
 const absolutePath = 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\src\\testLinks\\fileLinks'; //absoluta y directorio
 const relativePath = 'src\\testLinks';
@@ -11,18 +11,18 @@ const relativePath = 'src\\testLinks';
 const getPathAbsolute = (route) =>{
     return path.isAbsolute(route) === true ? route : path.resolve(route)
 }
-  
+
 const validateRoute = (routeAbsolute) =>{
     return fs.existsSync(routeAbsolute) 
 }
+
 //console.log(validateRoute('E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\src\\testLinks'));//relative path that was passed by absolute.
 
-//Identificar si es archivo o carpeta
 const isFile = (route) => fs.lstatSync(route).isFile();
 
 const isMd = route => ((path.extname(route) === '.md'));
 
-const readDirectory = route => fs.readdirSync(route);
+const readDirectory = (route) => fs.readdirSync(route);
 
 //Test solo para directorios
 const getFilesMd = (filePath) =>{
@@ -42,41 +42,40 @@ const getFilesMd = (filePath) =>{
     }
     return arrayNewPathAbs
 };
-//console.log(getFilesMd('E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\src\\testLinks'))
+
+
 
 const readFile = route => fs.readFileSync(route, 'utf-8');
 
 const getLinks = (route) =>{
     const render = new marked.Renderer();
     let arrayLinks = [];
-    route.forEach((File) =>{
-     // console.log(File);
-        render.link = (href, title, text) =>{
-            const propertiesFind = {
-                href,
-                text,
-                file: File,
-            }
-            arrayLinks.push(propertiesFind);
+    getFilesMd(route).forEach((file) =>{
+      render.link = (href, title, text) => { // renderer define salida ouput con tres propiedades
+        const linkProperties = {
+          href,
+          text,
+          file
         };
-        marked(readFile(File), { renderer: render})
+        arrayLinks.push(linkProperties);
+      };
+        marked(readFile(file), { renderer: render})
     });
-    
     return arrayLinks
 };
-
-const arrMd = [
+/* const arrMd = [
   "E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\src\\testLinks\\archivo1.md",
   "E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\src\\testLinks\\archivoEmpty.md",
   "E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\src\\testLinks\\fileLinks\\archivo2.md"
 ];
-//console.log(getLinks(arrMd));
+console.log(getLinks(arrMd)); */
 
 const validateLink = (arrayLink) => {
-    const statusLinks = arrayLink.map((element) => // map: retorna un array nuevo
+    const statusLinks = arrayLink.map((element) => 
     fetch(element.href)
-      .then((res) => { //la interfaz Response contiene el código de estado de la respuesta (ejm., 200 para un éxito).
-        if(res.status == 200){
+      .then((res) => {
+        //console.log(res);
+        if((res.status >= 200) && (res.status <= 399)){
           return {
             href: element.href,
             text: (element.text.substring(0, 50)),
@@ -84,7 +83,7 @@ const validateLink = (arrayLink) => {
             status: res.status,
             statusText: 'OK'
           }
-        } else if((res.status == 404 )|| (res.status  == 400)){
+        } else if((res.status < 200 )|| (res.status >=400)){
             return {
             href: element.href,
             text: (element.text.substring(0, 50)),
@@ -106,12 +105,32 @@ const validateLink = (arrayLink) => {
     return Promise.all(statusLinks);
   };
 
- /*  const saveArray = getLinks(arrMd);
-  validateLink(saveArray).then((res)=>console.log(res)); */
+ const saveArray = [
+  {
+    href: 'https://www.bbc.com/mundo',
+    text: 'link',
+    file: 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\src\\testLinks\\archivo1.md'
+  },
+  {
+    href: 'https://www.ionos.es/paginas-web/desarrollo-web/tutorial-de-markdown',
+    text: 'link',
+    file: 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\src\\testLinks\\archivo1.md'
+  },
+  {
+    href: 'https://www.bculinary.com/es/home',
+    text: 'link',
+    file: 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\src\\testLinks\\fileLinks\\archivo2.md'
+  },
+  {
+    href: 'https://www.ionos.es/paginas-web/tutorial-de-markdown',
+    text: 'link',
+    file: 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\src\\testLinks\\fileLinks\\archivo2.md'
+  }
+];
+ /*  validateLink(saveArray).then((res)=>console.log(res,'VALIDATE STATUS')); */
 
-   //Suma de todos los links, Unique and broken
   const totalLink = (array) =>{ //statusLink
-    const total = array.leght;
+    const total = array.length;
     return total;
   } 
 
@@ -122,10 +141,8 @@ const validateLink = (arrayLink) => {
 
   const brokenLinks = (array) =>{
     const broken = array.filter((link) => link.statusText == 'fail');
-    //console.log(broken)
-    return broken.leght;
+    return broken.length;
   };
-
 
   module.exports = {
     getPathAbsolute,
