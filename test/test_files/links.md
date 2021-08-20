@@ -1,7 +1,5 @@
 # Path test  --> ARCHIVO 01
 ## Path correct
-[link](https://www.bbc.com/mundo)
-[link](https://www.npmjs.com/package/fetch-mock)
+[Markdown](https://es.wikipedia.org/wiki/Markdown)
 
-## path error
-[link](https://abc.github.io/assets404/)
+

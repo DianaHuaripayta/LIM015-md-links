@@ -1,4 +1,5 @@
 //---mocks
+  
 const nodeFetch = jest.requireActual('node-fetch');
 const fetchMock = require('fetch-mock').sandbox();
 
