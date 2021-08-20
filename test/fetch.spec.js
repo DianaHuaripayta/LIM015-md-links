@@ -1,36 +1,48 @@
+
 const fetchMock = require('../__mocks__/node-fetch');
 const fetch = require('node-fetch');
-const { validateLink } = require('../src/main');
-//const mdlinks= require('../src/mdLinks');
-
+const { validateOptions } = require('../src/path');
+//const mdlinks = require('../src/mdlinks.js');
 jest.mock('node-fetch');
 
 describe('validate 200', () => {
   it('validar status 200', (done) => {
-    const input = [
+    const resultValidateLinks = [
       {
-        href: 'https://router.vuejs.org/api/',
-        text: 'Vue',
+        href: 'https://es.wikipedia.org/wiki/Markdown',
+        text: 'Markdown',
+        path: 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\links.md',
+      },
+      {
+        href: 'https://es.wikipedia.org/wiki/Markdown',
+        text: 'markdown2',
         path: 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\linkTestFetch.md',
       },
       {
-        href: 'https://developer.mozilla.org/en-US/',
-        text: 'MDN',
-        path: 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\linkTestFetch.md',
+        href: 'https://jestjs.io/docs/expect#expectassertionsnumber',
+        text: 'good',
+        path: 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\broken_Link\\failLink.md',
       }
     ]
     const result = [
       {
-        href: 'https://router.vuejs.org/api/',
-        text: 'Vue',
+        href: 'https://es.wikipedia.org/wiki/Markdown',
+        text: 'Markdown',
+        path: 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\links.md',
+        status: 200,
+        statusText: 'OK'
+      },
+      {
+        href: 'https://es.wikipedia.org/wiki/Markdown',
+        text: 'markdown2',
         path: 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\linkTestFetch.md',
         status: 200,
         statusText: 'OK'
       },
       {
-        href: 'https://developer.mozilla.org/en-US/',
-        text: 'MDN',
-        path: 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\linkTestFetch.md',
+        href: 'https://jestjs.io/docs/expect#expectassertionsnumber',
+        text: 'good',
+        path: 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\broken_Link\\failLink.md',
         status: 200,
         statusText: 'OK'
       }
@@ -39,7 +51,7 @@ describe('validate 200', () => {
       status: 200,
       statusText: 'OK'
     });
-    return validateLink(input).then((res) => {expect(res).toEqual(result)
+    return validateOptions(resultValidateLinks).then((res) => {expect(res).toEqual(result)
   });
 });
 });

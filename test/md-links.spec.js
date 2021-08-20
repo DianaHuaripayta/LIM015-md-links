@@ -1,4 +1,4 @@
-const {
+/* const {
   getPathAbsolute,
   validateRoute,
   isFile,
@@ -109,4 +109,4 @@ describe('es una funcion', () => {
   
   expect(getLinks('E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\links.md')).toEqual(output);
 });
-});
+}); */
