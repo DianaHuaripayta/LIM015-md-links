@@ -1,57 +1,37 @@
-
-const fetchMock = require('../__mocks__/node-fetch');
-const fetch = require('node-fetch');
-const { validateOptions } = require('../src/path');
-//const mdlinks = require('../src/mdlinks.js');
-jest.mock('node-fetch');
+const { validateLinks } = require('../src/path');
 
 describe('validate 200', () => {
-  it('validar status 200', (done) => {
-    const resultValidateLinks = [
+  test('validar status 200',() => {
+    const input = [
       {
         href: 'https://es.wikipedia.org/wiki/Markdown',
-        text: 'Markdown',
-        path: 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\links.md',
+        text: 'Link',
+        file: 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\linkTestFetch.md',
       },
       {
-        href: 'https://es.wikipedia.org/wiki/Markdown',
-        text: 'markdown2',
-        path: 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\linkTestFetch.md',
-      },
-      {
-        href: 'https://jestjs.io/docs/expect#expectassertionsnumber',
-        text: 'good',
-        path: 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\broken_Link\\failLink.md',
+        href: 'https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Arrays/123456789',
+        text: 'LinkBroken',
+        file: 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\linkTestFetch.md',
       }
-    ]
+    ];
     const result = [
       {
         href: 'https://es.wikipedia.org/wiki/Markdown',
-        text: 'Markdown',
-        path: 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\links.md',
+        text: 'Link',
+        file: 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\linkTestFetch.md',
         status: 200,
         statusText: 'OK'
       },
       {
-        href: 'https://es.wikipedia.org/wiki/Markdown',
-        text: 'markdown2',
-        path: 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\linkTestFetch.md',
-        status: 200,
-        statusText: 'OK'
-      },
-      {
-        href: 'https://jestjs.io/docs/expect#expectassertionsnumber',
-        text: 'good',
-        path: 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\broken_Link\\failLink.md',
-        status: 200,
-        statusText: 'OK'
+        href: 'https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Arrays/123456789',
+        text: 'LinkBroken',
+        file: 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\linkTestFetch.md',
+        status: 404,
+        statusText: 'Not Found'
       }
     ];
-    fetch.mockImplementation({
-      status: 200,
-      statusText: 'OK'
+    return validateLinks(input).then((res) => {
+      expect(res).toEqual(result);
     });
-    return validateOptions(resultValidateLinks).then((res) => {expect(res).toEqual(result)
   });
-});
 });

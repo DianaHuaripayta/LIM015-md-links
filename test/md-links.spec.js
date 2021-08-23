@@ -1,89 +1,101 @@
-/* const {
-  getPathAbsolute,
-  validateRoute,
+const {
+  getAbsolutePath,
+  existsRoute,
   isFile,
-  isMd,
-  readDirectory,
-  getFilesMd,
-  readFile,
-  getLinks
-} = require('../src/main.js');
-//Retornar ruta absoluta
-describe('Una ruta relativa debe retornar una ruta absoluta', () => {
-  it('comprobar si es una funcion', () => {
-    expect(typeof getPathAbsolute).toBe('function');
-  });
-
-  it('si es relativa convierte en absoluta', () => {
-    expect(getPathAbsolute('test\\test_files')).toEqual('E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files');
-  });
-});
+  isMD,
+  getLinkMd,
+  getAllLinks
+} = require('../src/path');
+/* -------------getAbsolutePath --------- */
 //Validar si existe
-describe('la funcion que valida la ruta', () => {
-  test('comprobar si es una funcion de validateRoute', () => {
-    expect(typeof validateRoute).toBe('function');
+describe('es function getAbsolutePath', () => {
+  test('comprobar si es una funcion de getAbsolutePath', () => {
+    expect(typeof getAbsolutePath).toBe('function');
   });
 
-  it('Verifica si la ruta existe', () => {
-    expect(validateRoute('test\\test_files\\links.md')).toBe(true);
+  test('Verifica si convierte a absolute', () => {
+    expect(getAbsolutePath('test\\test_files\\links.md')).toBe('E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\links.md');
   });
 });
+/* -------existsRoute------- */
+describe('Comprueba la existencia de la ruta', () => {
+  test('Valida si es una función', () => {
+  expect(typeof existsRoute).toBe('function');
+  });
+  it('retorna un boleano si la ruta existe', () => {
+     expect(existsRoute('E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\links.md')).toBe(true);
+  });
+
+  it('tendrá que retornar falso si e path es invalido', () => {
+      expect(existsRoute('./documents/example/')).toBe(false);
+  });
+});
+/* -------isFile------- */
 //Verifica si es file
 describe('la funcion verifica si es file', () => {
-  it('comprobar si es una funcion', () => {
+  test('comprobar si es una funcion', () => {
     expect(typeof isFile).toBe('function');
   });
 
   it('verifica si es file', () => {
-    expect(isFile('E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\links.md')).toEqual(true);
+    expect(isFile('E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\links.md')).toBe(true);
   });
 });
-//Ver si el archivo tiene la extension .md
+/* -------isMD------ */
 describe('es una funcion', () => {
   it('comprobar si es una funcion', () => {
-    expect(typeof isMd).toBe('function');
+    expect(typeof isMD).toBe('function');
   });
 
   it('verifica si tiene la extension .md', () => {
-    expect(isMd('E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\links.md')).toEqual(true);
+    expect(isMD('E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\links.md')).toBe(true);
   });
 });
 
 //Leer lo que hay dentro de las carpetas DIR
 describe('es una funcion', () => {
   it('comprobar si es una funcion', () => {
-    expect(typeof readDirectory).toBe('function');
+    expect(typeof getLinkMd).toBe('function');
   });
+const output =[ 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\broken_Link\\failLink.md' ]
 
   it('verifica si tiene la extension .md', () => {
-    expect(readDirectory('E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\broken_Link')).toEqual([ 'failLink.md' ]);
+    expect(getLinkMd('E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\broken_Link')).toEqual(output);
   });
 });
 
-// getFilesMd
+/* ------------getAllLinks------------ */
 describe('es una funcion', () => {
   test('comprobar si es una funcion', () => {
-    expect(typeof getFilesMd).toBe('function');
+    expect(typeof getAllLinks).toBe('function');
   });
 
   it('Obtiene los archivos con extension md ademas busca en cada carpeta en caso sea un directorio', () => {
+  
     const result = [
-      'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\broken_Link\\failLink.md',
-      'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\links.md',
-      'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\linkTestFetch.md',
+      {
+        href: 'https://es.wikipedia.org/wiki/Markdown',
+        text: 'Link',
+        file: 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\linkTestFetch.md',
+      },
+      {
+        href: 'https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Arrays/123456789',
+        text: 'LinkBroken',
+        file: 'E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\linkTestFetch.md',
+      }
     ]
-    expect(getFilesMd('E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files')).toEqual(result);
+    expect(getAllLinks('E:\\Diana_Angelica\\LIM015\\LIM015-md-links\\test\\test_files\\linkTestFetch.md')).toEqual(result);
   });
 });
 
-//  readFile
+/* //  readFile
 describe('es una funcion', () => {
   it('comprobar si es una funcion', () => {
     expect(typeof readFile).toBe('function');
   });
-});
+}); */
 //Get links
-describe('es una funcion', () => {
+/* describe('es una funcion', () => {
   it('comprobar si es una funcion', () => {
     expect(typeof getLinks).toBe('function');
   });
